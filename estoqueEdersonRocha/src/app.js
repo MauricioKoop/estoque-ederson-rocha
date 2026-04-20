@@ -2,22 +2,37 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// Importando as nossas novas rotas
+import viewRoutes from "./routes/viewsRoutes.js";
+import estoqueRoutes from "./routes/estoqueRoutes.js";
+
+// Configuração necessária para o path funcionar dentro de src/
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Middlewares
-app.use(express.json());
-
-// Servindo arquivos estáticos (CSS, JS do front)
-// Como o app.js está dentro de 'src', a pasta 'views' está no mesmo nível
-app.use(express.static(path.join(__dirname, "views")));
-
-// Rota para o seu HTML
-app.get("/", (req, res) => {
-	res.sendFile(path.join(__dirname, "views", "index.html"));
+// --- MIDDLEWARES ---
+app.use((req, res, next) => {
+	console.log(`Request Type: ${req.method}`);
+	console.log(`Content Type: ${req.headers["content-type"]}`);
+	console.log(`Date: ${new Date()}`);
+	next();
 });
 
-// Exportamos o 'app' configurado, mas sem o .listen()
+// 1. Permite que o Express entenda JSON (essencial para o CRUD)
+app.use(express.json());
+
+// 2. Serve arquivos estáticos (CSS, Imagens, JS do front) da pasta views
+app.use(express.static(path.join(__dirname, "views")));
+
+// --- ROTAS ---
+
+// 3. Rotas de Páginas (HTML)
+app.use("/", viewRoutes);
+
+// 4. Rotas de Dados/API (JSON)
+// Usamos o prefixo /api para separar bem o que é dado do que é tela
+app.use("/api/estoque", estoqueRoutes);
+
 export default app;
