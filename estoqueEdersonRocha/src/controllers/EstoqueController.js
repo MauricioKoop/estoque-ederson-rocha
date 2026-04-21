@@ -1,35 +1,119 @@
-import { Material } from "../models/Material.js";
-import { Estoque } from "../models/Estoque.js";
+import MaterialModel from "../models/material.model.js";
 
 export class EstoqueController {
-	constructor() {
-		this.estoquePrincipal = new Estoque();
-	}
+	//método para adicionar um novo material
+	async adicionarNovoMaterial(req, res) {
+		try {
+			const { codigoNumerico, nomeMaterial, saldoEstoque } = req.body;
 
-	//altera o nome do material
-	alteraNomeMaterial(idMaterial, novoNomeMaterial) {
-		if (this.estoquePrincipal.estoque.length > 0) {
-			const material = this.estoquePrincipal.estoque.find((material) => {
-				if (idMaterial === material.codigoNumerico) {
-					material.setNomeMaterial(novoNomeMaterial);
-				}
+			// 1. Verifica se o material já existe (equivalente ao seu findIndex)
+			const material = await MaterialModel.findOne({ codigoNumerico });
+
+			if (material) {
+				//adiciona ao estoque
+				material.saldoEstoque += Number(saldoEstoque);
+				await material.save();
+				return res.status(200).json({
+					message:
+						"Esse material já existe, saldo atualizado com sucesso",
+					material,
+				});
+			}
+
+			//Se não existe cria um novo material
+			const novoMaterial = new MaterialModel({
+				codigoNumerico,
+				nomeMaterial,
+				saldoEstoque,
 			});
+			await novoMaterial.save();
+
+			res.status(200).json({
+				message: "Material criado com sucesso!",
+				novoMaterial,
+			});
+		} catch (error) {
+			res.status(500).send({ error: error.message });
 		}
 	}
 
-	//metodo para adicionar um material novo no estoque
-	adicionarNovoMaterial(codigo, nomeMaterial, qnt) {
-		const novoItem = new Material(codigo, nomeMaterial, qnt);
-		this.estoquePrincipal.adicionaAoEstoque(novoItem);
+	//metodo para listar todo estoque
+	async exibirEstoqueCompleto(req, res) {
+		try {
+			const listaEstoque = await MaterialModel.find();
+			res.status(200).json(listaEstoque);
+		} catch (error) {
+			res.status(500).send({ error: error.message });
+		}
 	}
 
-	//metodo para remover um material do estoque
-	removerMaterialEstoque(codigo, qnt) {
-		this.estoquePrincipal.retiraDoEstoque(codigo, qnt);
+	//metodo para remover do estoque
+	async removerQuantidadeMaterial(req, res) {
+		try {
+			const { codigoNumerico, quantidade } = req.body;
+
+			const material = await MaterialModel.findOne({ codigoNumerico });
+
+			if (!material) {
+				return res
+					.status(401)
+					.json({ message: "Material não encontrado!" });
+			}
+
+			//Diminui a quantidade em estoque do material e impede que seja negativo
+			material.saldoEstoque -= Number(quantidade);
+			if (material.saldoEstoque < 0) material.saldoEstoque = 0;
+
+			await material.save();
+			res.status(200).json({ message: "Saída registrada!", material });
+		} catch (error) {
+			res.status(500).json({ error: error.message });
+		}
 	}
 
-	//Metodo para exibir todo estoque
-	exibirEstoqueCompleto() {
-		this.estoquePrincipal.exibeEstoqueCompleto();
+	//metodo para alterar o nome do Material
+	async alteraNomeMaterial(req, res) {
+		try {
+			const { codigoNumerico, novoNome } = req.body;
+
+			const material = await MaterialModel.findOne({ codigoNumerico });
+
+			if (material) {
+				material.nomeMaterial = novoNome;
+				await material.save();
+				return res
+					.status(200)
+					.json({ message: "Nome do material alterado", material });
+			}
+
+			res.status(401).json({ message: "Material não encontrado" });
+		} catch (error) {
+			res.status(500).json({ error: error.message });
+		}
+	}
+
+	//deletar um material do estoque
+	async deletarMaterialEstoque(req, res) {
+		try {
+			const { codigoNumerico } = req.body;
+
+			const materialExcluido = await MaterialModel.findOneAndDelete({
+				codigoNumerico,
+			});
+
+			if (!materialExcluido) {
+				return res.status(401).json({
+					message: "Material não encontrado para exclusão!",
+				});
+			}
+
+			res.status(200).json({
+				message: "Material Excluído definitivamente",
+			});
+		} catch (error) {
+			res.status(500).json({ error: error.message });
+		}
 	}
 }
+
+export default new EstoqueController();
