@@ -40,7 +40,27 @@ export class EstoqueController {
 	//metodo para listar todo estoque
 	async exibirEstoqueCompleto(req, res) {
 		try {
-			const listaEstoque = await MaterialModel.find();
+			const { codigoNumerico, data } = req.query; // Pega os filtros da URL
+			let busca = {}; // Objeto que será passado ao Mongoose
+
+			// 1. Se informou o código, adiciona ao filtro
+			if (codigoNumerico) {
+				busca.codigoNumerico = codigoNumerico;
+			}
+
+			// 2. Se informou a data, precisamos filtrar pelo intervalo do dia
+			if (data) {
+				const inicioDia = new Date(data);
+				const fimDia = new Date(data);
+				fimDia.setHours(23, 59, 59, 999);
+
+				// Filtra materiais criados entre 00:00 e 23:59 desse dia
+				busca.data = { $gte: inicioDia, $lte: fimDia };
+			}
+
+			// Busca no banco com o filtro dinâmico (se vazio, traz tudo)
+			const listaEstoque = await MaterialModel.find(busca);
+
 			res.status(200).json(listaEstoque);
 		} catch (error) {
 			res.status(500).send({ error: error.message });
