@@ -50,9 +50,8 @@ export class EstoqueController {
 
 			// 2. Se informou a data, precisamos filtrar pelo intervalo do dia
 			if (data) {
-				const inicioDia = new Date(data);
-				const fimDia = new Date(data);
-				fimDia.setHours(23, 59, 59, 999);
+				const inicioDia = new Date(`${data}T00:00:00`);
+				const fimDia = new Date(`${data}T23:59:59`);
 
 				// Filtra materiais criados entre 00:00 e 23:59 desse dia
 				busca.data = { $gte: inicioDia, $lte: fimDia };

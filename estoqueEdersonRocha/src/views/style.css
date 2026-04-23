@@ -1,3 +1,11 @@
 h1 {
 	color: orange;
 }
+
+table, th, td {
+	border: 1px solid gray;
+}
+
+th, td {
+	padding: 5px;
+}
