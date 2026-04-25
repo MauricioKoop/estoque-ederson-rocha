@@ -10,14 +10,20 @@
 		<h1>Gerenciador de Estoque</h1>
 
 		<form id="form-busca-dados">
-			<label for="codigoNumerico">Pesquise no estoque pelo Código Numerico do Material</label>
-			<input id="codigoNumerico" type="number" min="3">
+			<label for="codigoNumerico"
+				>Pesquise no estoque pelo Código Numerico do Material</label
+			>
+			<input id="codigoNumerico" type="number" min="3" />
 
-			<label for="dataMaterial">Pesquise no estoque pela data de cadastro do Material</label>
-			<input id="dataMaterial" type="date">
+			<label for="dataMaterial"
+				>Pesquise no estoque pela data de cadastro do Material</label
+			>
+			<input id="dataMaterial" type="date" />
 
-			<input id="btn-submit" type="submit">
+			<input id="btn-submit" type="submit" />
 		</form>
+
+		<div id="erroEstoqueVazio"></div>
 
 		<h2>Tabela de Estoque</h2>
 		<table id="lista-de-estoque">
