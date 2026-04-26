@@ -28,7 +28,7 @@ export class EstoqueController {
 			await novoMaterial.save();
 
 			res.status(200).json({
-				message: "Material criado com sucesso!",
+				message: `<div class="alert alert-success" role="alert">Material criado com sucesso!</div>`,
 				novoMaterial,
 			});
 		} catch (error) {
@@ -84,7 +84,7 @@ export class EstoqueController {
 
 			await material.save();
 			res.status(200).json({
-				message: `<p>Saída registrada no produto ${material.nomeMaterial}, Saldo atualizado = ${material.saldoEstoque}</p>`,
+				message: `Saída registrada no produto: #${material.codigoNumerico}, ${material.nomeMaterial}, Saldo atualizado = ${material.saldoEstoque}`,
 				material,
 			});
 		} catch (error) {
@@ -98,12 +98,13 @@ export class EstoqueController {
 			const { codigoNumerico, novoNome } = req.body;
 
 			const material = await MaterialModel.findOne({ codigoNumerico });
+			const nomeAntigoMaterial = material.nomeMaterial;
 
 			if (material) {
 				material.nomeMaterial = novoNome;
 				await material.save();
 				return res.status(200).json({
-					message: `<p>Você alterou o nome do material para ${material.nomeMaterial}</p>`,
+					message: `Você alterou o nome do material: #${material.codigoNumerico}, ${nomeAntigoMaterial} para ${material.nomeMaterial}`,
 					material,
 				});
 			}

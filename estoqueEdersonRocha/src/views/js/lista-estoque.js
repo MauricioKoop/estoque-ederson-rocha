@@ -122,8 +122,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 	function exibeMensagemEstoqueVazio(materiais) {
 		if (materiais.length == 0) {
-			elEstoqueVazio.innerHTML =
-				"Nenhum material cadastrado com essas informações!";
+			elEstoqueVazio.innerHTML = `
+				<div class="alert alert-danger" role="alert">
+					Nenhum material encontrado com as informações escolhidas!
+				</div>
+			`;
 		}
 
 		//limpa o formulario

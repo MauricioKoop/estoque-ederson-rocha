@@ -7,9 +7,9 @@ import {
 document.addEventListener("DOMContentLoaded", () => {
 	const feedback = document.getElementById("feedback-container");
 
-	// Função auxiliar para exibir as mensagens padronizadas do seu Controller
+	// Função auxiliar para exibir as mensagens padronizadas do Controller
 	const exibirResposta = (dados, sucesso = true) => {
-		// Usamos classes do Bootstrap: 'alert alert-success' ou 'alert alert-danger'
+		// 'alert alert-success' ou 'alert alert-danger'
 		const classe = sucesso
 			? "alert alert-success shadow-sm"
 			: "alert alert-danger shadow-sm";
@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		feedback.innerHTML = `
 			<div class="${classe} alert-dismissible fade show" role="alert">
 				${dados.message || "Operação realizada!"}
-				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
 		`;
 	};
