@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	const formBuscaDados = document.getElementById("form-busca-dados");
 
 	formBuscaDados.addEventListener("submit", async (e) => {
-		const btnClicado = e.submitter;
 		e.preventDefault();
 
 		//captura os valores dos campos codigo material e data

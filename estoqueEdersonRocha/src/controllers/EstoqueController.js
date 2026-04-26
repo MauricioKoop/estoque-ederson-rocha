@@ -14,8 +14,7 @@ export class EstoqueController {
 				material.saldoEstoque += Number(saldoEstoque);
 				await material.save();
 				return res.status(200).json({
-					message:
-						"Esse material já existe, saldo atualizado com sucesso",
+					message: `<p>O material "${material.nomeMaterial}" já existe. Saldo atualizado para ${material.saldoEstoque} unidades.</p>`,
 					material,
 				});
 			}
@@ -84,7 +83,10 @@ export class EstoqueController {
 			if (material.saldoEstoque < 0) material.saldoEstoque = 0;
 
 			await material.save();
-			res.status(200).json({ message: "Saída registrada!", material });
+			res.status(200).json({
+				message: `<p>Saída registrada no produto ${material.nomeMaterial}, Saldo atualizado = ${material.saldoEstoque}</p>`,
+				material,
+			});
 		} catch (error) {
 			res.status(500).json({ error: error.message });
 		}
@@ -100,9 +102,10 @@ export class EstoqueController {
 			if (material) {
 				material.nomeMaterial = novoNome;
 				await material.save();
-				return res
-					.status(200)
-					.json({ message: "Nome do material alterado", material });
+				return res.status(200).json({
+					message: `<p>Você alterou o nome do material para ${material.nomeMaterial}</p>`,
+					material,
+				});
 			}
 
 			res.status(401).json({ message: "Material não encontrado" });
@@ -127,7 +130,7 @@ export class EstoqueController {
 			}
 
 			res.status(200).json({
-				message: "Material Excluído definitivamente",
+				message: `O Material ${materialExcluido.nomeMaterial} foi Excluído definitivamente`,
 			});
 		} catch (error) {
 			res.status(500).json({ error: error.message });
