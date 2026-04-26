@@ -1,3 +1,6 @@
-export const API_ESTOQUE = "http://localhost:3000/api/estoque";
-export const API_ESTOQUE_NOME = "http://localhost:3000/api/estoque/nome";
-export const API_ESTOQUE_QUANTIDADE = "http://localhost:3000/api/estoque/quantidade";
+export const API_ESTOQUE =
+	"https://estoque-ederson-rocha.onrender.com/api/estoque";
+export const API_ESTOQUE_NOME =
+	"https://estoque-ederson-rocha.onrender.com/api/estoque/nome";
+export const API_ESTOQUE_QUANTIDADE =
+	"https://estoque-ederson-rocha.onrender.com/api/estoque/quantidade";
