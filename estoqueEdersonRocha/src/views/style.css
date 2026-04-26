@@ -1,11 +1,25 @@
-h1 {
-	color: orange;
+/* Cores sutis para os badges de quantidade */
+.bg-success-subtle {
+	background-color: #d1e7dd;
+	color: #0f5132;
+}
+.bg-danger-subtle {
+	background-color: #f8d7da;
+	color: #842029;
 }
 
-table, th, td {
-	border: 1px solid gray;
+/* Efeito de hover nos cards */
+.transition {
+	transition: all 0.3s ease;
 }
 
-th, td {
-	padding: 5px;
+.hover-shadow:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+	border: 1px solid #0d6efd44 !important;
+}
+
+/* Ajuste para ícones do Bootstrap */
+.bi {
+	vertical-align: middle;
 }

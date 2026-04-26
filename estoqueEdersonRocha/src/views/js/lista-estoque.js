@@ -63,26 +63,60 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	});
 
 	function montaTabelaDeEstoque(materiais) {
-		const elTabela = document.getElementById("lista-de-estoque");
+		const containerEstoque = document.getElementById("lista-de-estoque");
 
-		elTabela.innerHTML =
-			"<tr><th>Código do Material</th><th>Nome do Material</th><th>Quantidade</th><th>Data</th></tr>";
+		containerEstoque.innerHTML = "";
 
 		materiais.forEach((material) => {
-			const tr = document.createElement("tr");
+			// Formata apenas para o padrão brasileiro
+			const dataBr = new Date(material.data).toLocaleDateString("pt-BR");
+			const horaBr = new Date(material.data).toLocaleTimeString("pt-BR", {
+				hour: "2-digit",
+				minute: "2-digit",
+			});
 
-			let templateStringDadosTabela = `
-                <tr>
-                    <td>${material.codigoNumerico}</td>
-                    <td>${material.nomeMaterial}</td>
-                    <td>${material.saldoEstoque}</td>
-					<td>${material.data}</td>
-                </tr>
-            `;
+			let templateStringDadosEstoque = `
+				<div class="col-12 col-md-6 col-lg-4">
+					<div class="card h-100 border-0 shadow-sm hover-shadow transition">
+						<div class="card-body p-4">
+							<div class="d-flex justify-content-between align-items-start mb-3">
+								<div>
+									<span class="badge bg-light text-dark border fw-normal mb-2">
+										ID: # ${material.codigoNumerico}
+									</span>
+									<h5 class="card-title fw-bold text-dark mb-0">${material.nomeMaterial}</h5>
+								</div>
+								<div class="text-center">
+									<div class="rounded-circle d-flex align-items-center justify-content-center ${material.saldoEstoque < 10 ? "bg-danger-subtle text-danger" : "bg-success-subtle text-success"}" 
+										style="width: 50px; height: 50px; border: 2px solid currentColor">
+										<span class="fw-bold fs-5">${material.saldoEstoque}</span>
+									</div>
+									<small class="d-block mt-1 text-muted fw-bold" style="font-size: 0.7rem; text-uppercase">QTD</small>
+								</div>
+							</div>
 
-			tr.innerHTML = templateStringDadosTabela;
+							<hr class="opacity-10">
 
-			elTabela.appendChild(tr);
+							<div class="row text-muted g-0">
+								<div class="col-6 border-end pe-2">
+									<small class="d-block text-uppercase" style="font-size: 0.65rem">Cadastro</small>
+									<div class="d-flex align-items-center" style="font-size: 0.85rem">
+										<i class="bi bi-calendar3 me-2 text-primary"></i> ${dataBr}
+									</div>
+								</div>
+								<div class="col-6 ps-3">
+									<small class="d-block text-uppercase" style="font-size: 0.65rem">Horário</small>
+									<div class="d-flex align-items-center" style="font-size: 0.85rem">
+										<i class="bi bi-clock me-2 text-primary"></i> ${horaBr}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			`;
+
+			containerEstoque.innerHTML += templateStringDadosEstoque;
 		});
 	}
 
